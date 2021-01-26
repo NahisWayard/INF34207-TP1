@@ -2,6 +2,18 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Docker
+
+### Build image
+* `docker build -t inf34207-tp1 .`
+
+### Run image
+* `docker run -p 80:5000 inf34207-tp1`
+
+If you don't want to build the image by yourself, the image is available on DockerHub: [nahiswayard/inf34207-tp1](https://hub.docker.com/repository/docker/nahiswayard/inf34207-tp1)
+
+* `docker run -p 80:5000 nahiswayard/inf34207-tp1`
+
 ## Available Scripts
 
 In the project directory, you can run:
