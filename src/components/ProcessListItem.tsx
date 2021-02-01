@@ -1,8 +1,10 @@
 import React from 'react';
-import {ListGroup} from "react-bootstrap";
+import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import {Process} from "../store/process/types";
 import {useDispatch} from "react-redux";
 import {removeProcess} from "../store/process/actions";
+import {Trash} from "react-bootstrap-icons";
+import ThreadItem from "./ThreadItem";
 
 interface ProcessProps {
     processId: number,
@@ -12,14 +14,27 @@ interface ProcessProps {
 function ProcessItemList(props: ProcessProps) {
     const dispatch = useDispatch();
 
-    const clickHandler = () => {
+    const deleteHandler = () => {
         dispatch(removeProcess(props.processId))
     }
-    
+
+    const threadList = props.process.operations.map((p, idx) => <ThreadItem key={idx} operations={p} />);
+
     return (
-        <ListGroup.Item onClick={clickHandler}>
-            {props.processId}
-        </ListGroup.Item>
+        <ListGroupItem>
+            <Card>
+                <Card.Header>
+                    <h2>{props.process.name} <Button onClick={deleteHandler} variant={"danger"} className="float-right"><Trash/></Button></h2>
+                    <div>PID: {props.processId}</div>
+                    <div>Priority: {props.process.priority}</div>
+                </Card.Header>
+                <Card.Body>
+                    <ListGroup horizontal>
+                        {threadList}
+                    </ListGroup>
+                </Card.Body>
+            </Card>
+        </ListGroupItem>
     )
 }
 

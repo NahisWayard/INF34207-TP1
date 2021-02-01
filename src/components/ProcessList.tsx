@@ -1,7 +1,7 @@
 import React from 'react';
+import {ListGroup} from 'react-bootstrap';
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
-import {ListGroup} from "react-bootstrap";
 import ProcessListItem from "./ProcessListItem";
 
 function ProcessList () {
@@ -11,7 +11,7 @@ function ProcessList () {
     return (
         <div>
             <h3>Process ID list</h3>
-            <ListGroup horizontal>
+            <ListGroup horizontal={true}>
                 {processesItems}
             </ListGroup>
         </div>
