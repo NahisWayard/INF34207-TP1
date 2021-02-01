@@ -15,7 +15,7 @@ function ProcessItemList(props: ProcessProps) {
     const clickHandler = () => {
         dispatch(removeProcess(props.processId))
     }
-
+    
     return (
         <ListGroup.Item onClick={clickHandler}>
             {props.processId}

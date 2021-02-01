@@ -1,7 +1,35 @@
-import {ADD_PROCESS, DEL_PROCESS, RamActionTypes, RamState} from './types'
+import {ADD_PROCESS, DEL_PROCESS, OperationType, RamActionTypes, RamState} from './types'
 
 const initialState: RamState = {
-    processes: []
+    processes: [
+        {
+            name: "Process 1",
+            threadCount: 1,
+            priority: 1,
+            operations: [
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+            ]
+        },
+        {
+            name: "Process 2",
+            threadCount: 2,
+            priority: 100,
+            operations: [
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+            ]
+        },
+        {
+            name: "Process 3",
+            threadCount: 3,
+            priority: 10,
+            operations: [
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
+                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+            ]
+        }
+    ]
 }
 
 export function ramReducer(

@@ -1,4 +1,13 @@
+export enum OperationType {
+    InputOutput = 0,
+    Calc = 1
+}
+
 export interface Process {
+    name: string
+    priority: number
+    threadCount: number
+    operations: OperationType[][]
 }
 
 export interface RamState {
