@@ -1,6 +1,6 @@
 import React from 'react';
 import {Operation, OperationStatus, OperationType} from "../store/process/types";
-import {Button, ButtonGroup, ButtonProps, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Button, ButtonGroup, ListGroupItem} from "react-bootstrap";
 import {ButtonVariant} from "react-bootstrap/types";
 
 interface ThreadProps {
