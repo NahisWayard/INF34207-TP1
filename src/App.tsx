@@ -5,11 +5,13 @@ import AddProcess from "./components/AddProcess";
 import ProcessList from "./components/ProcessList";
 import { Provider } from "react-redux";
 import { store } from './store'
+import OrchestratorControl from "./components/OrchestratorControl";
 
 function App() {
   return (
       <Provider store={store}>
         <div className="App">
+            <OrchestratorControl />
             <AddProcess />
             <ProcessList />
         </div>
