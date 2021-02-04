@@ -1,16 +1,16 @@
 import React from 'react';
-import {OperationType} from "../store/process/types";
+import {Operation, OperationType} from "../store/process/types";
 import {ListGroup, ListGroupItem} from "react-bootstrap";
 
 interface ThreadProps {
-    operations: OperationType[]
+    operations: Operation[]
 }
 
 function ThreadItem(props: ThreadProps) {
     return (
         <ListGroupItem>
             <ListGroup>
-                {props.operations.map((op, idx) => <div key={idx}>{op === OperationType.Calc ? "Calc" : "I/O"}</div>)}
+                {props.operations.map((op, idx) => <div key={idx}>{op.type === OperationType.CALC ? "Calc" : "I/O"}</div>)}
             </ListGroup>
         </ListGroupItem>
     )

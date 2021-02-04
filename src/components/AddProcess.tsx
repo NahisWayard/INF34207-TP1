@@ -1,8 +1,9 @@
-import {Button, Modal, Form, Row, Col} from "react-bootstrap";
-import React, { useState } from "react";
+import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {addProcess} from "../store/process/actions";
-import {OperationType} from "../store/process/types";
+import {Operation, Process, ProcessStatus} from "../store/process/types";
+import {defaultCalcOperation, defaultIOOperation} from "../store/process/reducers";
 
 
 function define_limit_nbImpair(val: number, divise: number){
@@ -17,7 +18,7 @@ function define_limit_nbImpair(val: number, divise: number){
     return 0
 }
 
-function insert_in_operation(tmp: OperationType[], op: OperationType, limit: number){
+function insert_in_operation(tmp: Operation[], op: Operation, limit: number){
     for (let a = 0; a < limit; a++){
         tmp.push(op)
     }
@@ -35,12 +36,12 @@ function AddProcess() {
         
         e.preventDefault();
         
-        const p = {
+        const p : Process = {
             name: e.target.ProcessName.value,
-            primaryKey: 1,
+            status: ProcessStatus.NEW,
             threadCount: e.target.NbThread.value,
             priority: e.target.Priority.value,
-            operations : [] as OperationType[][]
+            operations : [] as Operation[][]
         }
 
         if (e.target.NbThread.value === "Entre 1 et 3") {
@@ -50,7 +51,7 @@ function AddProcess() {
         let calcNb = e.target.NbInCalc.value;
         let IONb = e.target.NbInOut.value;
 
-        let tmpOperation = [] as OperationType[]
+        let tmpOperation = [] as Operation[]
         
         let limit1 = (calcNb - define_limit_nbImpair(calcNb, p.threadCount)) / p.threadCount;
         let limit2 = (IONb - define_limit_nbImpair(IONb, p.threadCount)) / p.threadCount;
@@ -59,15 +60,15 @@ function AddProcess() {
         for (let i = 0; i < p.threadCount; i++){
             
                 if (i === p.threadCount - 1 && define_limit_nbImpair(calcNb, p.threadCount) !== 0) {
-                    insert_in_operation(tmpOperation, OperationType.Calc, limit1 + define_limit_nbImpair(calcNb, p.threadCount));
+                    insert_in_operation(tmpOperation, defaultIOOperation, limit1 + define_limit_nbImpair(calcNb, p.threadCount));
                 } else {
-                    insert_in_operation(tmpOperation, OperationType.Calc, limit1);
+                    insert_in_operation(tmpOperation, defaultCalcOperation, limit1);
                 }
                 
                 if (i === p.threadCount - 1 && define_limit_nbImpair(IONb, p.threadCount) !== 0) {
-                    insert_in_operation(tmpOperation, OperationType.InputOutput, limit2 + define_limit_nbImpair(IONb, p.threadCount));      
+                    insert_in_operation(tmpOperation, defaultIOOperation, limit2 + define_limit_nbImpair(IONb, p.threadCount));
                 } else { 
-                    insert_in_operation(tmpOperation, OperationType.InputOutput, limit2);
+                    insert_in_operation(tmpOperation, defaultIOOperation, limit2);
                 }
 
             p.operations.push(tmpOperation);

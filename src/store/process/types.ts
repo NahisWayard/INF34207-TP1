@@ -1,13 +1,33 @@
 export enum OperationType {
-    InputOutput = 0,
-    Calc = 1
+    INPUT_OUTPUT,
+    CALC
+}
+
+export enum OperationStatus {
+    IDLE,
+    RUNNING,
+    DONE
+}
+
+export interface Operation {
+    type: OperationType
+    status: OperationStatus
+}
+
+export enum ProcessStatus {
+    NEW,
+    READY,
+    RUNNING,
+    WAITING,
+    TERMINATED
 }
 
 export interface Process {
     name: string
     priority: number
     threadCount: number
-    operations: OperationType[][]
+    status: ProcessStatus
+    operations: Operation[][]
 }
 
 export interface RamState {

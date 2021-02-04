@@ -1,4 +1,22 @@
-import {ADD_PROCESS, DEL_PROCESS, OperationType, RamActionTypes, RamState} from './types'
+import {
+    ADD_PROCESS,
+    DEL_PROCESS,
+    Operation,
+    OperationStatus,
+    OperationType,
+    ProcessStatus,
+    RamActionTypes,
+    RamState
+} from './types'
+
+export const defaultIOOperation: Operation = {
+    status: OperationStatus.IDLE,
+    type: OperationType.INPUT_OUTPUT
+}
+export const defaultCalcOperation: Operation = {
+    status: OperationStatus.IDLE,
+    type: OperationType.CALC
+}
 
 const initialState: RamState = {
     processes: [
@@ -6,27 +24,30 @@ const initialState: RamState = {
             name: "Process 1",
             threadCount: 1,
             priority: 1,
+            status: ProcessStatus.NEW,
             operations: [
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
             ]
         },
         {
             name: "Process 2",
             threadCount: 2,
             priority: 100,
+            status: ProcessStatus.NEW,
             operations: [
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
             ]
         },
         {
             name: "Process 3",
             threadCount: 3,
             priority: 10,
+            status: ProcessStatus.NEW,
             operations: [
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput],
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
+                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
             ]
         }
     ]

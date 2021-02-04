@@ -19,7 +19,7 @@ function OrchestratorControl () {
         setSelectedStrategy(Strategies[Number(e.target.selectedOptions[0].value)])
     }
 
-    const strategiesAsOptions = Strategies.map((s, idx) => <option value={idx}>{s.getName()}</option>)
+    const strategiesAsOptions = Strategies.map((s, idx) => <option key={idx} value={idx}>{s.getName()}</option>)
 
     return (
         <Row>
