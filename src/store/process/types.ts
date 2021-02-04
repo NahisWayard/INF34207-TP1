@@ -15,11 +15,11 @@ export interface Operation {
 }
 
 export enum ProcessStatus {
-    NEW,
-    READY,
-    RUNNING,
-    WAITING,
-    TERMINATED
+    NEW = "New",
+    READY = "Ready",
+    RUNNING = "Running",
+    WAITING = "Waiting",
+    TERMINATED = "Terminated"
 }
 
 export interface Process {

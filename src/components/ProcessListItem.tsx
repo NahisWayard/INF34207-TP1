@@ -27,6 +27,7 @@ function ProcessItemList(props: ProcessProps) {
                     <h2>{props.process.name} <Button onClick={deleteHandler} variant={"danger"} className="float-right"><Trash/></Button></h2>
                     <div>PID: {props.processId}</div>
                     <div>Priority: {props.process.priority}</div>
+                    <div>Status: {props.process.status}</div>
                 </Card.Header>
                 <Card.Body>
                     <ListGroup horizontal>
