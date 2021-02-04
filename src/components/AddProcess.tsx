@@ -4,6 +4,25 @@ import {useDispatch} from "react-redux";
 import {addProcess} from "../store/process/actions";
 import {OperationType} from "../store/process/types";
 
+
+function define_limit_nbImpair(val: number, divise: number){
+    let tmp = val;
+
+    if (val % divise !== 0) {
+        while (tmp % divise !== 0) {
+            tmp = tmp - 1
+        }
+        return (val - tmp)
+    }
+    return 0
+}
+
+function insert_in_operation(tmp: OperationType[], op: OperationType, limit: number){
+    for (let a = 0; a < limit; a++){
+        tmp.push(op)
+    }
+}
+
 function AddProcess() {
 
     const [show, setShow] = useState(false);
@@ -21,11 +40,40 @@ function AddProcess() {
             primaryKey: 1,
             threadCount: e.target.NbThread.value,
             priority: e.target.Priority.value,
-            operations: [
-                [OperationType.InputOutput, OperationType.Calc, OperationType.InputOutput]
-            ]
+            operations : [] as OperationType[][]
         }
 
+        if (e.target.NbThread.value === "Entre 1 et 3") {
+            p.threadCount = Math.floor(Math.random() * (3)) + 1;
+        }
+        
+        let calcNb = e.target.NbInCalc.value;
+        let IONb = e.target.NbInOut.value;
+
+        let tmpOperation = [] as OperationType[]
+        
+        let limit1 = (calcNb - define_limit_nbImpair(calcNb, p.threadCount)) / p.threadCount;
+        let limit2 = (IONb - define_limit_nbImpair(IONb, p.threadCount)) / p.threadCount;
+        
+
+        for (let i = 0; i < p.threadCount; i++){
+            
+                if (i === p.threadCount - 1 && define_limit_nbImpair(calcNb, p.threadCount) !== 0) {
+                    insert_in_operation(tmpOperation, OperationType.Calc, limit1 + define_limit_nbImpair(calcNb, p.threadCount));
+                } else {
+                    insert_in_operation(tmpOperation, OperationType.Calc, limit1);
+                }
+                
+                if (i === p.threadCount - 1 && define_limit_nbImpair(IONb, p.threadCount) !== 0) {
+                    insert_in_operation(tmpOperation, OperationType.InputOutput, limit2 + define_limit_nbImpair(IONb, p.threadCount));      
+                } else { 
+                    insert_in_operation(tmpOperation, OperationType.InputOutput, limit2);
+                }
+
+            p.operations.push(tmpOperation);
+            tmpOperation = []
+        }
+ 
         dispatch(addProcess(p))
         handleClose();
     }
@@ -41,48 +89,56 @@ function AddProcess() {
                     <Modal.Header closeButton>
                         <Modal.Title>Ajouter un processus</Modal.Title>
                     </Modal.Header>
+
                     <Modal.Body>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm={4} >Nom du processus</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control type="text" placeholder="Nom du processus" name="ProcessName" required/>
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column sm={4} >Nom du processus</Form.Label>
-                                <Col sm={8}>
-                                    <Form.Control type="text" placeholder="Nom du processus" name="ProcessName" required/>
-                                </Col>
-                            </Form.Group>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm={4} >Priorité</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Priorité" name="Priority" required />
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column sm={4} >Priorité</Form.Label>
-                                <Col sm={8}>
-                                    <Form.Control type="number" placeholder="Priorité" name="Priority" required />
-                                </Col>
-                            </Form.Group>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm={4} >Nombre d'instructions de calcul</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control type="number" min="0" defaultValue="1" placeholder="Nombre d'instructions de calcul" name="NbInCalc" required/>
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column sm={4} >Nombre d'E/S</Form.Label>
-                                <Col sm={8}>
-                                    <Form.Control type="number" placeholder="Nombre d'entrée sortie" name="NbInOut" required/>
-                                </Col>
-                            </Form.Group>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm={4} >Nombre d'E/S</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control type="number" min="0" defaultValue="1" placeholder="Nombre d'entrée sortie" name="NbInOut" required/>
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column sm={4} >Nombre de calculs</Form.Label>
-                                <Col sm={8}>
-                                    <Form.Control type="number" placeholder="Nombre de calcule" name="NbCalc" required/>
-                                </Col>
-                            </Form.Group>
+                        <Form.Group as={Row}>
+                            <Form.Label column sm={4} >Nombre de cycle(s) avant l'initialisation</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Nombre de calcule" name="NbCalc" required/>
+                            </Col>
+                        </Form.Group>
 
-                            <Form.Group as={Row} controlId="exampleForm.ControlSelect1">
-                                <Form.Label column sm={4} >Nombre de Thread</Form.Label>
-                                <Col sm={8}>
-                                    <Form.Control as="select" name="NbThread">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </Form.Control>
-                                </Col>
-                            </Form.Group>
-
+                        <Form.Group as={Row} controlId="exampleForm.ControlSelect1">
+                            <Form.Label column sm={4} >Nombre de Thread</Form.Label>
+                            <Col sm={8}>
+                                <Form.Control as="select" name="NbThread">
+                                    <option selected>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>Entre 1 et 3</option>
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
                     </Modal.Body>
+
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
                             Fermer
