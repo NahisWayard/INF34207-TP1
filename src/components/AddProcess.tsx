@@ -6,7 +6,7 @@ import {Operation, Process, ProcessStatus} from "../store/process/types";
 import {defaultCalcOperation, defaultIOOperation} from "../store/process/reducers";
 
 
-function define_limit_nbImpair(val: number, divise: number){
+function defineNonDivisibleNb(val: number, divise: number){
     let tmp = val;
 
     if (val % divise !== 0) {
@@ -18,9 +18,37 @@ function define_limit_nbImpair(val: number, divise: number){
     return 0
 }
 
-function insert_in_operation(tmp: Operation[], op: Operation, limit: number){
+function insertInOperation(tmp: Operation[], op: Operation, limit: number){
     for (let a = 0; a < limit; a++){
         tmp.push(op)
+    }
+}
+
+function dispatchOperations(p : Process, calcNb : number, IONb : number) {
+
+    let tmpOperation = [] as Operation[]
+
+    const nbCalcIsDivisible = defineNonDivisibleNb(calcNb, p.threadCount)
+    const nbIOIsDivisible = defineNonDivisibleNb(IONb, p.threadCount)
+    const calcLimit = (calcNb - nbCalcIsDivisible) / p.threadCount;
+    const IOLimit = (IONb - nbIOIsDivisible) / p.threadCount;
+
+    for (let i = 0; i < p.threadCount; i++){
+            
+        if (i === p.threadCount - 1 && nbCalcIsDivisible !== 0) {
+            insertInOperation(tmpOperation, defaultCalcOperation, calcLimit + nbCalcIsDivisible);
+        } else {
+            insertInOperation(tmpOperation, defaultCalcOperation, calcLimit);
+        }
+        
+        if (i === p.threadCount - 1 && nbIOIsDivisible !== 0) {
+            insertInOperation(tmpOperation, defaultIOOperation, IOLimit + nbIOIsDivisible);
+        } else { 
+            insertInOperation(tmpOperation, defaultIOOperation, IOLimit);
+        }
+
+        p.operations.push(tmpOperation);
+        tmpOperation = []
     }
 }
 
@@ -48,32 +76,7 @@ function AddProcess() {
             p.threadCount = Math.floor(Math.random() * (3)) + 1;
         }
         
-        let calcNb = e.target.NbInCalc.value;
-        let IONb = e.target.NbInOut.value;
-
-        let tmpOperation = [] as Operation[]
-        
-        let limit1 = (calcNb - define_limit_nbImpair(calcNb, p.threadCount)) / p.threadCount;
-        let limit2 = (IONb - define_limit_nbImpair(IONb, p.threadCount)) / p.threadCount;
-        
-
-        for (let i = 0; i < p.threadCount; i++){
-            
-                if (i === p.threadCount - 1 && define_limit_nbImpair(calcNb, p.threadCount) !== 0) {
-                    insert_in_operation(tmpOperation, defaultIOOperation, limit1 + define_limit_nbImpair(calcNb, p.threadCount));
-                } else {
-                    insert_in_operation(tmpOperation, defaultCalcOperation, limit1);
-                }
-                
-                if (i === p.threadCount - 1 && define_limit_nbImpair(IONb, p.threadCount) !== 0) {
-                    insert_in_operation(tmpOperation, defaultIOOperation, limit2 + define_limit_nbImpair(IONb, p.threadCount));
-                } else { 
-                    insert_in_operation(tmpOperation, defaultIOOperation, limit2);
-                }
-
-            p.operations.push(tmpOperation);
-            tmpOperation = []
-        }
+        dispatchOperations(p, e.target.NbCalc.value, e.target.NbInOut.value)
  
         dispatch(addProcess(p))
         handleClose();
@@ -109,7 +112,7 @@ function AddProcess() {
                         <Form.Group as={Row}>
                             <Form.Label column sm={4} >Nombre d'instructions de calcul</Form.Label>
                             <Col sm={8}>
-                                <Form.Control type="number" min="0" defaultValue="1" placeholder="Nombre d'instructions de calcul" name="NbInCalc" required/>
+                                <Form.Control type="number" min="0" defaultValue="1" placeholder="Nombre d'instructions de calcul" name="NbCalc" required/>
                             </Col>
                         </Form.Group>
 
@@ -123,7 +126,7 @@ function AddProcess() {
                         <Form.Group as={Row}>
                             <Form.Label column sm={4} >Nombre de cycle(s) avant l'initialisation</Form.Label>
                             <Col sm={8}>
-                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Nombre de calcule" name="NbCalc" required/>
+                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Nombre de calcule" name="NbCycle" required/>
                             </Col>
                         </Form.Group>
 
@@ -131,7 +134,7 @@ function AddProcess() {
                             <Form.Label column sm={4} >Nombre de Thread</Form.Label>
                             <Col sm={8}>
                                 <Form.Control as="select" name="NbThread">
-                                    <option selected>1</option>
+                                    <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
                                     <option>Entre 1 et 3</option>
