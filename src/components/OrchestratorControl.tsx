@@ -1,18 +1,42 @@
 import React, {useState} from 'react';
 import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../store";
+import {updateProcess, updateProcesses} from "../store/process/actions";
+import {Process, ProcessStatus} from "../store/process/types";
 
 function OrchestratorControl () {
     const [selectedStrategy, setSelectedStrategy] = useState(Strategies[0]);
+    const dispatch = useDispatch();
+    const processes = useSelector((state: RootState) => state.ram.processes);
+
+    const processNext = (ps: Process[], i: number) => {
+        if (i >= ps.length)
+            return;
+        ps[i].status = ProcessStatus.RUNNING;
+        dispatch(updateProcess(ps[i]));
+        setTimeout(() => {
+            processNext(ps, i + 1);
+        }, 1000);
+    }
 
     const handleStart = () => {
-        console.log(selectedStrategy.getName());
+        setTimeout(() => {
+            processNext(processes, 0);
+        }, 1000);
     }
 
     const handleStop = () => {
     }
 
     const handleReset = () => {
+        handleStop();
+        const np = processes.map((p) => {
+            p.status = ProcessStatus.NEW;
+            return (p);
+        })
+        dispatch(updateProcesses(np));
     }
 
     const handleChangeStrategy = (e: React.ChangeEvent<HTMLSelectElement>) => {

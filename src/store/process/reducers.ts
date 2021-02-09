@@ -6,7 +6,8 @@ import {
     OperationType,
     ProcessStatus,
     RamActionTypes,
-    RamState
+    RamState,
+    SET_PROCESS, SET_PROCESSES
 } from './types'
 
 export const defaultIOOperation: Operation = {
@@ -66,6 +67,19 @@ export function ramReducer(
             state.processes.splice(action.payload, 1);
             return {
                 processes: [...state.processes]
+            }
+        case SET_PROCESS:
+            const idx = state.processes.findIndex((k) => {
+                return k.name === action.payload.name
+            });
+            const arr = state.processes;
+            arr[idx] = action.payload;
+            return {
+                processes: [...arr]
+            }
+        case SET_PROCESSES:
+            return {
+                processes: action.payload
             }
         default:
             return state

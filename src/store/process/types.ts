@@ -36,6 +36,8 @@ export interface RamState {
 
 export const ADD_PROCESS = 'ADD_PROCESS'
 export const DEL_PROCESS = 'DEL_PROCESS'
+export const SET_PROCESS = 'SET_PROCESS'
+export const SET_PROCESSES = 'SET_PROCESSES'
 
 interface AddProcessAction {
     type: typeof ADD_PROCESS
@@ -47,4 +49,14 @@ interface RemoveProcessAction {
     payload: number
 }
 
-export type RamActionTypes = AddProcessAction | RemoveProcessAction
+interface SetProcessAction {
+    type: typeof SET_PROCESS
+    payload: Process
+}
+
+interface SetProcessesAction {
+    type: typeof SET_PROCESSES
+    payload: Process[]
+}
+
+export type RamActionTypes = AddProcessAction | RemoveProcessAction | SetProcessAction | SetProcessesAction
