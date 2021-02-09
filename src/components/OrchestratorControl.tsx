@@ -3,35 +3,45 @@ import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
-import {updateProcess, updateProcesses} from "../store/process/actions";
+import {updateProcesses} from "../store/process/actions";
 import {Process, ProcessStatus} from "../store/process/types";
 
+
 function OrchestratorControl () {
+    const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
+    const [running, setRunning] = useState<boolean>(false);
     const [selectedStrategy, setSelectedStrategy] = useState(Strategies[0]);
+
     const dispatch = useDispatch();
     const processes = useSelector((state: RootState) => state.ram.processes);
 
-    const processNext = (ps: Process[], i: number) => {
-        if (i >= ps.length)
+    const processNext = (ps: Process[]) => {
+        const ret = selectedStrategy.run(ps);
+        if (ret.wait === -1)
             return;
-        ps[i].status = ProcessStatus.RUNNING;
-        dispatch(updateProcess(ps[i]));
-        setTimeout(() => {
-            processNext(ps, i + 1);
-        }, 1000);
+        console.log(ret.ps);
+        dispatch(updateProcesses(ret.ps)); //This dispatch not working (probably because it's called setTimeout callback)
+        setTimer(setTimeout(() => {
+            processNext(ps);
+        }, 1000));
     }
 
     const handleStart = () => {
-        setTimeout(() => {
-            processNext(processes, 0);
-        }, 1000);
+        setTimer(setTimeout(() => {
+            processNext(processes);
+        }, 1000));
+        setRunning(true);
     }
 
     const handleStop = () => {
+        setRunning(false);
+        if (timer !== undefined)
+            clearTimeout(timer);
     }
 
     const handleReset = () => {
         handleStop();
+        setTimer(undefined);
         const np = processes.map((p) => {
             p.status = ProcessStatus.NEW;
             return (p);
@@ -61,9 +71,9 @@ function OrchestratorControl () {
             </Col>
             <Col md={1}>
                 <ButtonGroup>
-                    <Button variant="success" onClick={handleStart}>Start</Button>
-                    <Button variant="danger" onClick={handleStop}>Stop</Button>
-                    <Button variant="warning" onClick={handleReset}>Reset</Button>
+                    <Button variant="success" onClick={handleStart} disabled={timer !== undefined}>Start</Button>
+                    <Button variant="danger" onClick={handleStop} disabled={timer === undefined || running === false}>Stop</Button>
+                    <Button variant="warning" onClick={handleReset} disabled={timer === undefined}>Reset</Button>
                 </ButtonGroup>
             </Col>
         </Row>
