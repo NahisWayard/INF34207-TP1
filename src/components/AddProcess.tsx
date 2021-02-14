@@ -2,8 +2,9 @@ import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {addProcess} from "../store/process/actions";
-import {Operation, Process, ProcessStatus} from "../store/process/types";
+import {Operation, OperationStatus, OperationType, Process, ProcessStatus} from "../store/process/types";
 import {defaultCalcOperation, defaultIOOperation} from "../store/process/reducers";
+import { tokenToString } from "typescript";
 
 
 function defineNonDivisibleNb(val: number, divise: number){
@@ -19,8 +20,23 @@ function defineNonDivisibleNb(val: number, divise: number){
 }
 
 function insertInOperation(tmp: Operation[], op: Operation, limit: number){
+
     for (let a = 0; a < limit; a++){
         tmp.push(op)
+    }
+
+}
+
+function shakeOperation(tabOp : Operation[], limit : number) {
+
+    let tmpOp = defaultCalcOperation;
+    let randPlace  = Math.floor(Math.random() * (limit));
+
+    for (let i = 0; i < limit; i++) {
+        tmpOp = tabOp[randPlace]
+        tabOp[randPlace] = tabOp[i];
+        tabOp[i] = tmpOp
+        randPlace  = Math.floor(Math.random() * (limit));
     }
 }
 
@@ -47,7 +63,9 @@ function dispatchOperations(p : Process, calcNb : number, IONb : number) {
             insertInOperation(tmpOperation, defaultIOOperation, IOLimit);
         }
 
+        shakeOperation(tmpOperation, tmpOperation.length)
         p.operations.push(tmpOperation);
+
         tmpOperation = []
     }
 }
@@ -120,13 +138,6 @@ function AddProcess() {
                             <Form.Label column sm={4} >Nombre d'E/S</Form.Label>
                             <Col sm={8}>
                                 <Form.Control type="number" min="0" defaultValue="1" placeholder="Nombre d'entrée sortie" name="NbInOut" required/>
-                            </Col>
-                        </Form.Group>
-
-                        <Form.Group as={Row}>
-                            <Form.Label column sm={4} >Nombre de cycle(s) avant l'initialisation</Form.Label>
-                            <Col sm={8}>
-                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Nombre de calcule" name="NbCycle" required/>
                             </Col>
                         </Form.Group>
 
