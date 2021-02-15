@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
 import {useDispatch, useSelector} from "react-redux";
