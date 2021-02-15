@@ -21,24 +21,25 @@ function OrchestratorControl () {
         dispatch(updateProcesses(ret.ps));
         if (ret.wait === -1) {
             setRunning(false);
+            setTimer(undefined);
             return;
         }
         setTimer(setTimeout(() => {
             processNext(ps);
-        }, 1000));
+        }, ret.wait));
     }
 
     const handleStart = () => {
-        setTimer(setTimeout(() => {
-            processNext(processes);
-        }, 1000));
+        processNext(processes);
         setRunning(true);
     }
 
     const handleStop = () => {
         setRunning(false);
-        if (timer !== undefined)
+        if (timer !== undefined) {
             clearTimeout(timer);
+            setTimer(undefined);
+        }
     }
 
     const handleReset = () => {
