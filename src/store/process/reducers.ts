@@ -1,22 +1,21 @@
 import {
     ADD_PROCESS,
     DEL_PROCESS,
-    Operation,
     OperationStatus,
     OperationType,
     ProcessStatus,
     RamActionTypes,
     RamState,
-    SET_PROCESS, SET_PROCESSES
+    SET_PROCESS,
+    SET_PROCESSES
 } from './types'
 
-export const defaultIOOperation: Operation = {
-    status: OperationStatus.IDLE,
-    type: OperationType.INPUT_OUTPUT
-}
-export const defaultCalcOperation: Operation = {
-    status: OperationStatus.IDLE,
-    type: OperationType.CALC
+export function defaultOperation(type: OperationType) {
+    return {
+        status: OperationStatus.IDLE,
+        type: type
+    }
+    
 }
 
 const initialState: RamState = {
@@ -27,7 +26,7 @@ const initialState: RamState = {
             priority: 1,
             status: ProcessStatus.NEW,
             operations: [
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ]
         },
         {
@@ -36,8 +35,8 @@ const initialState: RamState = {
             priority: 100,
             status: ProcessStatus.NEW,
             operations: [
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ]
         },
         {
@@ -46,9 +45,9 @@ const initialState: RamState = {
             priority: 10,
             status: ProcessStatus.NEW,
             operations: [
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation],
-                [defaultIOOperation, defaultCalcOperation, defaultIOOperation]
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
+                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ]
         }
     ]

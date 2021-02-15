@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
 import {updateProcesses} from "../store/process/actions";
-import {Process, ProcessStatus} from "../store/process/types";
+import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 
 
 function OrchestratorControl () {
@@ -17,10 +17,12 @@ function OrchestratorControl () {
 
     const processNext = (ps: Process[]) => {
         const ret = selectedStrategy.run(ps);
-        if (ret.wait === -1)
+
+        dispatch(updateProcesses(ret.ps));
+        if (ret.wait === -1) {
+            setRunning(false);
             return;
-        console.log(ret.ps);
-        dispatch(updateProcesses(ret.ps)); //This dispatch not working (probably because it's called setTimeout callback)
+        }
         setTimer(setTimeout(() => {
             processNext(ps);
         }, 1000));
@@ -44,6 +46,11 @@ function OrchestratorControl () {
         setTimer(undefined);
         const np = processes.map((p) => {
             p.status = ProcessStatus.NEW;
+            for (let i in p.operations) {
+                for (let j in p.operations[i]) {
+                    p.operations[i][j].status = OperationStatus.IDLE;
+                }
+            }
             return (p);
         })
         dispatch(updateProcesses(np));

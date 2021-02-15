@@ -2,10 +2,8 @@ import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 import {addProcess} from "../store/process/actions";
-import {Operation, OperationStatus, OperationType, Process, ProcessStatus} from "../store/process/types";
-import {defaultCalcOperation, defaultIOOperation} from "../store/process/reducers";
-import { tokenToString } from "typescript";
-
+import {defaultOperation} from "../store/process/reducers";
+import {Operation, OperationType, Process, ProcessStatus} from "../store/process/types";
 
 function defineNonDivisibleNb(val: number, divise: number){
     let tmp = val;
@@ -29,7 +27,7 @@ function insertInOperation(tmp: Operation[], op: Operation, limit: number){
 
 function shakeOperation(tabOp : Operation[], limit : number) {
 
-    let tmpOp = defaultCalcOperation;
+    let tmpOp = defaultOperation(OperationType.CALC);
     let randPlace  = Math.floor(Math.random() * (limit));
 
     for (let i = 0; i < limit; i++) {
@@ -52,15 +50,15 @@ function dispatchOperations(p : Process, calcNb : number, IONb : number) {
     for (let i = 0; i < p.threadCount; i++){
             
         if (i === p.threadCount - 1 && nbCalcIsDivisible !== 0) {
-            insertInOperation(tmpOperation, defaultCalcOperation, calcLimit + nbCalcIsDivisible);
+            insertInOperation(tmpOperation, defaultOperation(OperationType.CALC), calcLimit + nbCalcIsDivisible);
         } else {
-            insertInOperation(tmpOperation, defaultCalcOperation, calcLimit);
+            insertInOperation(tmpOperation, defaultOperation(OperationType.CALC), calcLimit);
         }
         
         if (i === p.threadCount - 1 && nbIOIsDivisible !== 0) {
-            insertInOperation(tmpOperation, defaultIOOperation, IOLimit + nbIOIsDivisible);
+            insertInOperation(tmpOperation, defaultOperation(OperationType.INPUT_OUTPUT), IOLimit + nbIOIsDivisible);
         } else { 
-            insertInOperation(tmpOperation, defaultIOOperation, IOLimit);
+            insertInOperation(tmpOperation, defaultOperation(OperationType.INPUT_OUTPUT), IOLimit);
         }
 
         shakeOperation(tmpOperation, tmpOperation.length)

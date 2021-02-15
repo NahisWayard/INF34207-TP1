@@ -5,8 +5,8 @@ import {RootState} from "../store";
 import ProcessListItem from "./ProcessListItem";
 
 function ProcessList () {
-    const processes = useSelector((state: RootState) => state.ram.processes);
-    const processesItems = processes.map((p, idx) => <ProcessListItem key={idx} processId={idx} process={p} />);
+    const ram = useSelector((state: RootState) => state.ram);
+    const processesItems = ram.processes.map((p, idx) => <ProcessListItem key={idx} processId={idx} process={p} />);
 
     return (
         <div>
