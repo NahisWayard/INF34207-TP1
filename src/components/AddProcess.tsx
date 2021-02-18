@@ -17,12 +17,10 @@ function defineNonDivisibleNb(val: number, divise: number){
     return 0
 }
 
-function insertInOperation(tmp: Operation[], op: Operation, limit: number){
-
+function insertInOperation(tmp: Operation[], type: OperationType, limit: number){
     for (let a = 0; a < limit; a++){
-        tmp.push(op)
+        tmp.push(defaultOperation(type))
     }
-
 }
 
 function shakeOperation(tabOp : Operation[], limit : number) {
@@ -50,15 +48,15 @@ function dispatchOperations(p : Process, calcNb : number, IONb : number) {
     for (let i = 0; i < p.threadCount; i++){
             
         if (i === p.threadCount - 1 && nbCalcIsDivisible !== 0) {
-            insertInOperation(tmpOperation, defaultOperation(OperationType.CALC), calcLimit + nbCalcIsDivisible);
+            insertInOperation(tmpOperation, OperationType.CALC, calcLimit + nbCalcIsDivisible);
         } else {
-            insertInOperation(tmpOperation, defaultOperation(OperationType.CALC), calcLimit);
+            insertInOperation(tmpOperation, OperationType.CALC, calcLimit);
         }
         
         if (i === p.threadCount - 1 && nbIOIsDivisible !== 0) {
-            insertInOperation(tmpOperation, defaultOperation(OperationType.INPUT_OUTPUT), IOLimit + nbIOIsDivisible);
+            insertInOperation(tmpOperation, OperationType.INPUT_OUTPUT, IOLimit + nbIOIsDivisible);
         } else { 
-            insertInOperation(tmpOperation, defaultOperation(OperationType.INPUT_OUTPUT), IOLimit);
+            insertInOperation(tmpOperation, OperationType.INPUT_OUTPUT, IOLimit);
         }
 
         shakeOperation(tmpOperation, tmpOperation.length)
@@ -76,7 +74,7 @@ function AddProcess() {
 
     const dispatch = useDispatch();
 
-    const clickHandler = (e: any) => { // Type à changer
+    const clickHandler = (e: any) => { // TODO: Type à changer
         
         e.preventDefault();
         
