@@ -16,12 +16,13 @@ function OrchestratorControl () {
     const processes = useSelector((state: RootState) => state.ram.processes);
 
     const processNext = (ps: Process[]) => {
-        const ret = selectedStrategy.run(ps);
+        const ret = selectedStrategy.process(ps);
 
         dispatch(updateProcesses(ret.ps));
         if (ret.wait === -1) {
             setRunning(false);
             setTimer(undefined);
+            //TODO Enable reset btn
             return;
         }
         setTimer(setTimeout(() => {

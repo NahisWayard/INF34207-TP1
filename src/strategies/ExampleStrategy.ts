@@ -1,30 +1,12 @@
-import IStrategy from "./IStrategy";
+import AStrategy, {StrategyControl} from "./IStrategy";
 import {OperationStatus, OperationType, Process, ProcessStatus} from "../store/process/types";
 
-export default class ExampleStrategy implements IStrategy {
-
+export default class ExampleStrategy extends AStrategy {
     getName(): string {
         return "Example Strategy";
     }
 
-    private static endPreviousOperation(ps: Process[]) : Process[] {
-        for (let id = 0; id < ps.length; id++) {
-            if (ps[id].status !== ProcessStatus.RUNNING)
-                continue;
-            for (let i = 0; i < ps[id].operations.length; i++)
-                for (let j = 0; j < ps[id].operations[i].length; j++) {
-                    if (ps[id].operations[i][j].status === OperationStatus.RUNNING) {
-                        ps[id].operations[i][j].status = OperationStatus.DONE;
-
-                        if (i === ps[id].operations.length - 1 && j === ps[id].operations[i].length - 1)
-                            ps[id].status = ProcessStatus.TERMINATED;
-                    }
-                }
-        }
-        return ps;
-    }
-
-    private static getNextPID(ps: Process[]) : number {
+    protected getNextPID(ps: Process[]): number {
         for (let id = 0; id < ps.length; id++) {
             if (ps[id].status === ProcessStatus.NEW)
                 return id;
@@ -41,18 +23,26 @@ export default class ExampleStrategy implements IStrategy {
         return -1;
     }
 
-    run(ps: Process[]): any {
-        ps = ExampleStrategy.endPreviousOperation(ps);
+    protected endPreviousOperation(ps: Process[]) : Process[] {
+        for (let id = 0; id < ps.length; id++) {
+            if (ps[id].status !== ProcessStatus.RUNNING)
+                continue;
+            for (let i = 0; i < ps[id].operations.length; i++)
+                for (let j = 0; j < ps[id].operations[i].length; j++) {
+                    if (ps[id].operations[i][j].status === OperationStatus.RUNNING) {
+                        ps[id].operations[i][j].status = OperationStatus.DONE;
 
+                        if (i === ps[id].operations.length - 1 && j === ps[id].operations[i].length - 1)
+                            ps[id].status = ProcessStatus.TERMINATED;
+                    }
+                }
+        }
+        return ps;
+    }
+
+    run(ps: Process[], id: number): StrategyControl {
         let turnDone = false;
         let waitTime = -1;
-        let id = ExampleStrategy.getNextPID(ps);
-
-        if (id === -1) {
-            console.log("Orchestration ended");
-            return {ps: ps, wait: -1}
-        }
-
 
         ps[id].status = ProcessStatus.RUNNING;
         for (let i = 0; i < ps[id].operations.length && !turnDone; i++) { //Thread loop
