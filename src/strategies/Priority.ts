@@ -1,5 +1,5 @@
 import AStrategy, {StrategyControl} from "./IStrategy";
-import {Process} from "../store/process/types";
+import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 
 export default class PriorityStrategy extends AStrategy {
     getName(): string {
@@ -7,17 +7,38 @@ export default class PriorityStrategy extends AStrategy {
     }
 
     protected getNextPID(ps: Process[]): number {
-        return 0;
-    }
+        let sortedId = -1;
+        let tmpPs = [...ps];
 
-    protected endPreviousOperation(ps: Process[]): Process[] {
-        return [];
+        tmpPs.sort(((a, b) => {
+            return b.priority - a.priority
+        }));
+
+        psLoop:
+        for (let id = 0; id < ps.length; id++) {
+            if (tmpPs[id].status === ProcessStatus.NEW) {
+                sortedId = id;
+                break;
+            }
+            if (tmpPs[id].status === ProcessStatus.TERMINATED)
+                continue;
+            for (let i = 0; i < tmpPs[id].operations.length; i++) {
+                for (let j = 0; j < tmpPs[id].operations[i].length; j++) {
+                    if (tmpPs[id].operations[i][j].status === OperationStatus.IDLE) {
+                        sortedId = id;
+                        break psLoop;
+                    }
+                }
+            }
+        }
+        return ps.indexOf(tmpPs[sortedId]);
     }
 
     protected run(ps: Process[], id: number): StrategyControl {
-        return {
-            ps: [],
-            wait: -1
-        };
+        let control = this.execOperation(ps, id);
+
+        if (control.ps[id].priority > 1)
+            control.ps[id].priority--;
+        return control;
     }
 }
