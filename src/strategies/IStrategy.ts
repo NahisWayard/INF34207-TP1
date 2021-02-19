@@ -52,8 +52,6 @@ export default abstract class AStrategy {
         let id = this.getNextPID(ps);
 
         if (id === -1) {
-            //TODO Toast to display ended
-            console.log("Orchestration ended");
             return {ps: ps, wait: -1}
         }
         return this.run(ps, id);

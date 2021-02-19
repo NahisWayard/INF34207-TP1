@@ -6,6 +6,8 @@ import ProcessList from "./components/ProcessList";
 import { Provider } from "react-redux";
 import { store } from './store'
 import OrchestratorControl from "./components/OrchestratorControl";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
             <AddProcess />
             <ProcessList />
         </div>
+        <ToastContainer />
       </Provider>
   );
 }

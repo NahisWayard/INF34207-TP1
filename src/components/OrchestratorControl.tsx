@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
 import {updateProcesses} from "../store/process/actions";
 import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
-
+import { toast } from 'react-toastify';
 
 function OrchestratorControl () {
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
@@ -24,6 +24,10 @@ function OrchestratorControl () {
             setEnded(true);
             setRunning(false);
             setTimer(undefined);
+            toast("Simulation ended", {
+                type: "success",
+                position: "bottom-right"
+            });
             return;
         }
         setTimer(setTimeout(() => {
