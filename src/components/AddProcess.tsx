@@ -119,7 +119,7 @@ function AddProcess() {
                         <Form.Group as={Row}>
                             <Form.Label column sm={4} >Priorité</Form.Label>
                             <Col sm={8}>
-                                <Form.Control type="number" min="0" defaultValue="0" placeholder="Priorité" name="Priority" required />
+                                <Form.Control type="number" min="1" defaultValue="1" placeholder="Priorité" name="Priority" required />
                             </Col>
                         </Form.Group>
 
