@@ -37,10 +37,10 @@ function OrchestratorControl () {
     }
 
     const handleStart = () => {
-        processNext(processes);
         setDisableStart(true);
         setDisableStop(false);
         setDisableReset(false);
+        processNext(processes);
     }
 
     const handleStop = () => {
