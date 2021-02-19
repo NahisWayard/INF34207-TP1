@@ -10,6 +10,7 @@ import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 function OrchestratorControl () {
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
     const [running, setRunning] = useState<boolean>(false);
+    const [ended, setEnded] = useState<boolean>(false);
     const [selectedStrategy, setSelectedStrategy] = useState(Strategies[0]);
 
     const dispatch = useDispatch();
@@ -20,9 +21,9 @@ function OrchestratorControl () {
 
         dispatch(updateProcesses(ret.ps));
         if (ret.wait === -1) {
+            setEnded(true);
             setRunning(false);
             setTimer(undefined);
-            //TODO Enable reset btn
             return;
         }
         setTimer(setTimeout(() => {
@@ -33,6 +34,7 @@ function OrchestratorControl () {
     const handleStart = () => {
         processNext(processes);
         setRunning(true);
+        setEnded(false);
     }
 
     const handleStop = () => {
@@ -82,7 +84,7 @@ function OrchestratorControl () {
                 <ButtonGroup>
                     <Button variant="success" onClick={handleStart} disabled={timer !== undefined}>Start</Button>
                     <Button variant="danger" onClick={handleStop} disabled={timer === undefined || running === false}>Stop</Button>
-                    <Button variant="warning" onClick={handleReset} disabled={timer === undefined}>Reset</Button>
+                    <Button variant="warning" onClick={handleReset} disabled={!ended && timer === undefined}>Reset</Button>
                 </ButtonGroup>
             </Col>
         </Row>
