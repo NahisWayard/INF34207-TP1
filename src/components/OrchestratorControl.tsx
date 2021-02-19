@@ -8,10 +8,12 @@ import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 import { toast } from 'react-toastify';
 
 function OrchestratorControl () {
-    const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
-    const [running, setRunning] = useState<boolean>(false);
-    const [ended, setEnded] = useState<boolean>(false);
+    const [disableStart, setDisableStart] = useState(false);
+    const [disableStop, setDisableStop] = useState(true);
+    const [disableReset, setDisableReset] = useState(true);
+
     const [selectedStrategy, setSelectedStrategy] = useState(Strategies[0]);
+    const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
 
     const dispatch = useDispatch();
     const processes = useSelector((state: RootState) => state.ram.processes);
@@ -21,8 +23,7 @@ function OrchestratorControl () {
 
         dispatch(updateProcesses(ret.ps));
         if (ret.wait === -1) {
-            setEnded(true);
-            setRunning(false);
+            setDisableStop(true);
             setTimer(undefined);
             toast("Simulation ended", {
                 type: "success",
@@ -37,12 +38,16 @@ function OrchestratorControl () {
 
     const handleStart = () => {
         processNext(processes);
-        setRunning(true);
-        setEnded(false);
+        setDisableStart(true);
+        setDisableStop(false);
+        setDisableReset(false);
     }
 
     const handleStop = () => {
-        setRunning(false);
+        setDisableStart(false);
+        setDisableStop(true);
+        setDisableReset(false);
+
         if (timer !== undefined) {
             clearTimeout(timer);
             setTimer(undefined);
@@ -51,7 +56,6 @@ function OrchestratorControl () {
 
     const handleReset = () => {
         handleStop();
-        setTimer(undefined);
         const np = processes.map((p) => {
             p.status = ProcessStatus.NEW;
             for (let i in p.operations) {
@@ -61,6 +65,8 @@ function OrchestratorControl () {
             }
             return (p);
         })
+        setDisableReset(true);
+        setTimer(undefined);
         dispatch(updateProcesses(np));
     }
 
@@ -86,9 +92,9 @@ function OrchestratorControl () {
             </Col>
             <Col md={1}>
                 <ButtonGroup>
-                    <Button variant="success" onClick={handleStart} disabled={timer !== undefined}>Start</Button>
-                    <Button variant="danger" onClick={handleStop} disabled={timer === undefined || running === false}>Stop</Button>
-                    <Button variant="warning" onClick={handleReset} disabled={!ended && timer === undefined}>Reset</Button>
+                    <Button variant="success" onClick={handleStart} disabled={disableStart}>Start</Button>
+                    <Button variant="danger" onClick={handleStop} disabled={disableStop}>Stop</Button>
+                    <Button variant="warning" onClick={handleReset} disabled={disableReset}>Reset</Button>
                 </ButtonGroup>
             </Col>
         </Row>
