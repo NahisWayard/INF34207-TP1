@@ -27,7 +27,8 @@ const initialState: RamState = {
             status: ProcessStatus.NEW,
             operations: [
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
-            ]
+            ],
+            time: 7
         },
         {
             name: "Process 2",
@@ -37,7 +38,8 @@ const initialState: RamState = {
             operations: [
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
-            ]
+            ],
+            time: 14
         },
         {
             name: "Process 3",
@@ -48,7 +50,8 @@ const initialState: RamState = {
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
-            ]
+            ],
+            time: 21
         }
     ]
 }

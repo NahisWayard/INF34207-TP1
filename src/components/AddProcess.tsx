@@ -83,7 +83,8 @@ function AddProcess() {
             status: ProcessStatus.NEW,
             threadCount: e.target.NbThread.value,
             priority: e.target.Priority.value,
-            operations : [] as Operation[][]
+            operations : [] as Operation[][],
+            time : parseInt(e.target.NbCalc.value) + (parseInt(e.target.NbInOut.value) * 3)
         }
 
         if (e.target.NbThread.value === "Entre 1 et 3") {
@@ -91,8 +92,8 @@ function AddProcess() {
         }
         
         dispatchOperations(p, e.target.NbCalc.value, e.target.NbInOut.value)
- 
         dispatch(addProcess(p))
+        
         handleClose();
     }
 

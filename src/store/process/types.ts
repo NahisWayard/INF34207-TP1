@@ -28,6 +28,7 @@ export interface Process {
     threadCount: number
     status: ProcessStatus
     operations: Operation[][]
+    time: number
 }
 
 export interface RamState {
