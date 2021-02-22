@@ -99,9 +99,16 @@ function AddProcess() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Ajouter un processus
-            </Button>
+            <Row>
+                <Col md={1}></Col>
+                <Col md={3}>
+                    <Button variant="primary" onClick={handleShow}>
+                        Ajouter un processus
+                    </Button>
+                </Col>
+
+            </Row>
+            
 
             <Modal size="lg" show={show} onHide={handleClose} centered>
                 <Form onSubmit={clickHandler}>

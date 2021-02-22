@@ -9,13 +9,17 @@ import OrchestratorControl from "./components/OrchestratorControl";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 function App() {
   return (
-      <Provider store={store}>
+      <Provider store={store}>    
         <div className="App">
-            <OrchestratorControl />
-            <AddProcess />
-            <ProcessList />
+          <br />
+          <h1 style={{textAlign: "center"}}>INF34207 - Systèmes d'exploitation TP01</h1>
+          <p style={{textAlign: "center"}}>Alexandre Nguyen | Lilian Arago </p>
+          <OrchestratorControl />
+          <AddProcess />
+          <ProcessList />
         </div>
         <ToastContainer />
       </Provider>

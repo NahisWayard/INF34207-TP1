@@ -77,27 +77,31 @@ function OrchestratorControl () {
     const strategiesAsOptions = Strategies.map((s, idx) => <option key={idx} value={idx}>{s.getName()}</option>)
 
     return (
-        <Row>
-            <Col md={3}>
-                <h2>Orchestrator control</h2>
-            </Col>
-            <Col md={2}>
-                <Form>
-                    <Form.Group controlId="exampleForm.SelectCustom">
-                        <Form.Control as="select" custom onChange={handleChangeStrategy}>
-                            {strategiesAsOptions}
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
-            </Col>
-            <Col md={1}>
-                <ButtonGroup>
-                    <Button variant="success" onClick={handleStart} disabled={disableStart}>Start</Button>
-                    <Button variant="danger" onClick={handleStop} disabled={disableStop}>Stop</Button>
-                    <Button variant="warning" onClick={handleReset} disabled={disableReset}>Reset</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
+        <div style={{marginTop: "4%"}}>
+            <br/>
+            <Row>
+                <Col md={1}></Col>
+                <Col md={3}>
+                    <h2>Politique d'ordonnancement</h2>
+                </Col>
+                <Col md={2}>
+                    <Form>
+                        <Form.Group controlId="exampleForm.SelectCustom">
+                            <Form.Control as="select" custom onChange={handleChangeStrategy}>
+                                {strategiesAsOptions}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>
+                </Col>
+                <Col md={1}>
+                    <ButtonGroup>
+                        <Button variant="success" onClick={handleStart} disabled={disableStart}>Start</Button>
+                        <Button variant="danger" onClick={handleStop} disabled={disableStop}>Stop</Button>
+                        <Button variant="warning" onClick={handleReset} disabled={disableReset}>Reset</Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
+        </div>
     )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ListGroup} from 'react-bootstrap';
+import {ListGroup, Row, Col} from 'react-bootstrap';
 import {useSelector} from "react-redux";
 import {RootState} from "../store";
 import ProcessListItem from "./ProcessListItem";
@@ -10,10 +10,24 @@ function ProcessList () {
 
     return (
         <div>
-            <h3>Process ID list</h3>
-            <ListGroup horizontal={true}>
-                {processesItems}
-            </ListGroup>
+            <br/>
+            <Row>
+                <Col md={1}></Col>
+                <Col md={10}>
+                    <h3>Liste des processus</h3>
+                </Col>
+                <Col md={1}></Col>   
+            </Row>
+            <br />
+            <Row>
+                <Col md={1}></Col>
+                <Col md={10}>
+                    <ListGroup horizontal={true}>
+                        {processesItems}
+                    </ListGroup>
+                </Col>
+                <Col md={1}></Col>
+            </Row>
         </div>
     )
 }

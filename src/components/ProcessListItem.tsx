@@ -24,9 +24,10 @@ function ProcessItemList(props: ProcessProps) {
         <ListGroupItem>
             <Card>
                 <Card.Header>
-                    <h2>{props.process.name} <Button onClick={deleteHandler} variant={"danger"} className="float-right"><Trash/></Button></h2>
+                    <h2>{props.process.name}  <Button onClick={deleteHandler} variant={"danger"} className="float-right"><Trash/></Button></h2>
                     <div>PID: {props.processId}</div>
-                    <div>Priority: {props.process.priority}</div>
+                    <div>Priorité: {props.process.priority}</div>
+                    <div>Durée: {props.process.time}</div>
                     <div>Status: {props.process.status}</div>
                 </Card.Header>
                 <Card.Body>
