@@ -11,7 +11,9 @@ function OrchestratorControl () {
     const [disableStart, setDisableStart] = useState(false);
     const [disableStop, setDisableStop] = useState(true);
     const [disableReset, setDisableReset] = useState(true);
+    const [disableMemory, setDisableMemory] = useState(false);
 
+    const [memory, setMemory] = useState(16);
     const [selectedStrategy, setSelectedStrategy] = useState(Strategies[0]);
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined);
 
@@ -40,6 +42,7 @@ function OrchestratorControl () {
         setDisableStart(true);
         setDisableStop(false);
         setDisableReset(false);
+        setDisableMemory(true);
         processNext(processes);
     }
 
@@ -67,6 +70,7 @@ function OrchestratorControl () {
         })
         setDisableReset(true);
         setTimer(undefined);
+        setDisableMemory(false);
         dispatch(updateProcesses(np));
     }
 
@@ -75,6 +79,7 @@ function OrchestratorControl () {
     }
 
     const strategiesAsOptions = Strategies.map((s, idx) => <option key={idx} value={idx}>{s.getName()}</option>)
+    const memoryUsed = processes.reduce((s, i) => s + i.operations.reduce((s, i) => s + i.length, 0), 0);
 
     return (
         <div style={{marginTop: "4%"}}>
@@ -92,6 +97,29 @@ function OrchestratorControl () {
                             </Form.Control>
                         </Form.Group>
                     </Form>
+                </Col>
+                <Col md={2}>
+                    <Row>
+                        <Col md={6}>
+                            Memory available (ko)
+                        </Col>
+                        <Col md={6}>
+                            <Form.Control type="text" value={memory} onChange={(e) => {
+                                let val = parseInt(e.target.value);
+
+                                if (!isNaN(val))
+                                    setMemory(val);
+                                else
+                                    setMemory(0);
+                            }} placeholder="Mémoire disponible (Mb)" name="memory" disabled={disableMemory} required/>
+                        </Col>
+                        <Col md={6}>
+                            Memory in use (ko)
+                        </Col>
+                        <Col md={6}>
+                            <Form.Control type="text" value={memoryUsed} name="memory" disabled={true} required/>
+                        </Col>
+                    </Row>
                 </Col>
                 <Col md={1}>
                     <ButtonGroup>
