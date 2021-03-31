@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import AddProcess from "./components/AddProcess";
+import BarrierList from "./components/BarrierList";
 import ProcessList from "./components/ProcessList";
 import { Provider } from "react-redux";
 import { store } from './store'
@@ -20,6 +21,7 @@ function App() {
           <OrchestratorControl />
           <AddProcess />
           <ProcessList />
+          <BarrierList />
         </div>
         <ToastContainer />
       </Provider>
