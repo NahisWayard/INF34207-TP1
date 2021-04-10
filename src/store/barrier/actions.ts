@@ -14,12 +14,13 @@ export function addBarrier(): BarrierActionTypes {
     }
 }
 
-export function toggleProcessBarrier(barrierId: number, processId: number) : BarrierActionTypes {
+export function toggleProcessBarrier(barrierId: number, processId: number, threadId: number) : BarrierActionTypes {
     return {
         type: TOGGLE_PROCESS_BARRIER,
         payload: {
             barrierId: barrierId,
-            processId: processId
+            processId: processId,
+            threadId: threadId
         }
     }
 }

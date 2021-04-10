@@ -1,9 +1,9 @@
-export interface Barrier {
-    concernedProcesses: number[]
+export interface Barriers {
+    [key: number]: number[]
 }
 
 export interface BarrierState {
-    barriers: Barrier[]
+    barriers: Barriers[]
 }
 
 export const ADD_BARRIER = 'ADD_BARRIER'
@@ -23,7 +23,8 @@ interface ToggleProcessBarrierAction {
     type: typeof TOGGLE_PROCESS_BARRIER
     payload: {
         barrierId: number,
-        processId: number
+        processId: number,
+        threadId: number
     }
 }
 
