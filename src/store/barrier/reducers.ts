@@ -7,12 +7,14 @@ import {
 } from './types'
 
 const initialState: BarrierState = {
-    barriers: []
+    barriers: [
+        {0:[0], 1:[1], 2:[0, 2]},
+    ]
 }
 
 export function barrierReducer(
     state = initialState,
-    action: BarrierActionTypes
+    action: BarrierActionTypes,
 ): BarrierState {
     switch (action.type) {
         case ADD_BARRIER:
@@ -35,7 +37,7 @@ export function barrierReducer(
                 array.splice(idx, 1);
                 console.log(action.payload, array);
                 barriers[action.payload.barrierId][action.payload.processId] = array;
-            } else {
+            } else { 
                 barriers[action.payload.barrierId][action.payload.processId].push(action.payload.threadId);
             }
             return {
