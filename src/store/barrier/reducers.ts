@@ -23,7 +23,9 @@ export function barrierReducer(
             }
         case DEL_BARRIER:
             state.barriers.splice(action.payload, 1);
-            return state;
+            return {
+                barriers: [...state.barriers]
+            };
         case TOGGLE_PROCESS_BARRIER:
             const barriers = state.barriers;
             if (barriers[action.payload.barrierId] === undefined)
