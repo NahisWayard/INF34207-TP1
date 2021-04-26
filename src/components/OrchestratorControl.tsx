@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
-import {updateProcesses} from "../store/process/actions";
+import {getMemoryInUse, getProcessesTotalMemory, updateProcesses} from "../store/process/actions";
 import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 import { toast } from 'react-toastify';
 
@@ -21,7 +21,7 @@ function OrchestratorControl () {
     const processes = useSelector((state: RootState) => state.ram.processes);
 
     const processNext = (ps: Process[]) => {
-        const ret = selectedStrategy.process(ps);
+        const ret = selectedStrategy.process(ps, memory);
 
         dispatch(updateProcesses(ret.ps));
         if (ret.wait === -1) {
@@ -79,7 +79,7 @@ function OrchestratorControl () {
     }
 
     const strategiesAsOptions = Strategies.map((s, idx) => <option key={idx} value={idx}>{s.getName()}</option>)
-    const memoryUsed = processes.reduce((s, i) => s + i.operations.reduce((s, i) => s + i.length, 0), 0);
+    const memoryUsed = getProcessesTotalMemory(processes);
 
     return (
         <div style={{marginTop: "4%"}}>

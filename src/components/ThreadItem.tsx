@@ -16,18 +16,22 @@ function ThreadItem(props: ThreadProps) {
             <ButtonGroup vertical>
                 {props.operations.map((op, idx) => {
                     let variant: ButtonVariant = "primary";
+                    let text = op.type === OperationType.CALC ? "Calc" : "I/O";
 
                     switch (op.status) {
                         case OperationStatus.DONE:
                             variant = "success"
                             break;
                         case OperationStatus.IDLE:
-                            variant = ""
+                            variant = op.type < 0 ? "danger" : ""
                             break;
                         case OperationStatus.RUNNING:
                             variant = "warning"
                     }
-                    return <Button key={idx} variant={variant}>{op.type === OperationType.CALC ? "Calc" : "I/O"}</Button>
+                    if (op.type < 0) {
+                        text = `B${-op.type}`;
+                    }
+                    return <Button key={idx} variant={variant}>{text}</Button>;
                 })}
             </ButtonGroup>
         </ListGroupItem>

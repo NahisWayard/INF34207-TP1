@@ -19,7 +19,8 @@ export enum ProcessStatus {
     READY = "Ready",
     RUNNING = "Running",
     WAITING = "Waiting",
-    TERMINATED = "Terminated"
+    TERMINATED = "Terminated",
+    SWAPPED = "Swapped"
 }
 
 export interface Process {
