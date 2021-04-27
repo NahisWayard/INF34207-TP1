@@ -32,7 +32,7 @@ export function updateProcesses(processes: Process[]): RamActionTypes {
 export function getMemoryInUse(p: Process[]) {
     return p.reduce(
         (s, i) => {
-            if (i.status == ProcessStatus.SWAPPED || i.status == ProcessStatus.TERMINATED)
+            if (i.status === ProcessStatus.SWAPPED || i.status === ProcessStatus.TERMINATED)
                 return s;
             return s + i.operations.reduce(
                 (s, i) => s + i.filter(x => x.type >= 0).length, 0)
@@ -42,7 +42,7 @@ export function getMemoryInUse(p: Process[]) {
 export function getProcessesTotalMemory(p: Process[]) {
     return p.reduce(
         (s, i) => {
-            if (i.status == ProcessStatus.TERMINATED)
+            if (i.status === ProcessStatus.TERMINATED)
                 return s;
             return s + i.operations.reduce(
                 (s, i) => s + i.filter(x => x.type >= 0).length, 0)

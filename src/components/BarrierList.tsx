@@ -61,7 +61,7 @@ function BarrierList(props: BarrierProps){
             <Row>
                 <Col md={1}></Col>
                 <Col md={10}>
-                    <Button onClick={RemoveBarrier} disabled>Remove Barriere</Button>
+                    <Button onClick={RemoveBarrier}>Remove Barriere</Button>
                     <Button onClick={ReinitializeBarrier} disabled>Reinitialize</Button>
                     <ListGroup horizontal={true}>
                         {barrierItems}

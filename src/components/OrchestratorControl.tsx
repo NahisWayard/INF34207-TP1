@@ -1,9 +1,9 @@
-import React, {memo, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, ButtonGroup, Col, Form, Row} from "react-bootstrap";
 import Strategies from "../strategies";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
-import {getMemoryInUse, getProcessesTotalMemory, updateProcesses} from "../store/process/actions";
+import {getProcessesTotalMemory, updateProcesses} from "../store/process/actions";
 import {OperationStatus, Process, ProcessStatus} from "../store/process/types";
 import { toast } from 'react-toastify';
 

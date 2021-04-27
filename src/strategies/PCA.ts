@@ -34,7 +34,7 @@ export default class PCAStrategy extends AStrategy {
 
         for (let i = 0; i < tmpTime.length; i++){
             nextPID = ps.indexOf(tmpTime[i])
-            if (ps[nextPID].status === ProcessStatus.NEW || ps[nextPID].status === ProcessStatus.RUNNING){
+            if (ps[nextPID].status === ProcessStatus.NEW || ps[nextPID].status === ProcessStatus.RUNNING) {
                 return nextPID;
             }
         }

@@ -2,12 +2,11 @@ import React, {useState} from 'react';
 import {RootState} from "../store";
 import {useDispatch, useSelector} from "react-redux";
 import {Button} from "react-bootstrap";
-import {addBarrier, removeBarrier} from "../store/barrier/actions";
+import {addBarrier} from "../store/barrier/actions";
 import {updateProcesses} from "../store/process/actions";
 import {Process} from "../store/process/types";
 import { Barriers } from '../store/barrier/types';
 import BarrierList from './BarrierList';
-import { BarrierState } from '../store/barrier/types';
 import {Operation} from "../store/process/types";
 
 // interface BarrierProps {
