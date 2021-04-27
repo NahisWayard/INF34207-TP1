@@ -49,7 +49,7 @@ function BarrierItem(props: ProcessProps){
 
         let bIdx = isBarrierExist(processID, threadID, tmp.type);
 
-        if (bIdx != -1) {
+        if (bIdx !== -1) {
             processlist[processID].operations[threadID].splice(bIdx, 1);
         } else {
             //processlist[processID].operations[threadID].unshift(tmp);

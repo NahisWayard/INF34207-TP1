@@ -8,7 +8,7 @@ import BarrierList from './BarrierList';
 function BarrierManager(){
     const dispatch = useDispatch();
     const barriers = useSelector(((state: RootState) => state.barriers)).barriers;
-    const [disableBarrier, setDisableBarrier] = useState(false);
+    const [disableBarrier] = useState(false);
     const barrierLists = barriers.map((p, idx) => <BarrierList key={idx} barrierId={idx} isDisabled={disableBarrier}/>);
 
     const AddBarrier = () => {
