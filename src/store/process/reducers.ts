@@ -26,7 +26,7 @@ const initialState: RamState = {
             priority: 1,
             status: ProcessStatus.NEW,
             operations: [
-                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
+                [defaultOperation(-1), defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ],
             time: 7
         },
@@ -37,7 +37,7 @@ const initialState: RamState = {
             status: ProcessStatus.NEW,
             operations: [
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
-                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
+                [defaultOperation(-1), defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ],
             time: 14
         },
@@ -47,9 +47,9 @@ const initialState: RamState = {
             priority: 10,
             status: ProcessStatus.NEW,
             operations: [
+                [defaultOperation(-1), defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
                 [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
-                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)],
-                [defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
+                [defaultOperation(-1), defaultOperation(OperationType.INPUT_OUTPUT), defaultOperation(OperationType.CALC), defaultOperation(OperationType.INPUT_OUTPUT)]
             ],
             time: 21
         }

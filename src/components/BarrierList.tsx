@@ -4,7 +4,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {ListGroup, Col, Row, Button} from "react-bootstrap";
 import {removeBarrier} from "../store/barrier/actions";
 import BarrierItem from './BarrierItem';
-//import {addBarrier, removeBarrier, toggleProcessBarrier} from "../store/barrier/actions";
+import {updateProcesses} from "../store/process/actions";
+import {Trash} from "react-bootstrap-icons";
 
 interface BarrierProps {
     barrierId : number,
@@ -18,51 +19,39 @@ function BarrierList(props: BarrierProps){
     const barriers = useSelector(((state: RootState) => state.barriers)).barriers;
     const barrierItems = ram.processes.map((p, idx) => <BarrierItem key={idx} processId={idx} process={p} barrierId={props.barrierId} isDisabled={props.isDisabled}/>);
 
-    // const testAddBarrier = () => {
-    //     dispatch(addBarrier());
-    //     console.log(barriers);
-    // }
-
-    // const testRemoveBarrier = () => {
-    //     dispatch(removeBarrier(barriers.length - 1));
-    // }
-
-    // const testToggleBarrier = () => {
-    //     dispatch(toggleProcessBarrier(0, 1, 3));
-    //     dispatch(toggleProcessBarrier(0, 1, 1));
-    // }
-
     const RemoveBarrier = () => {
-        dispatch(removeBarrier(props.barrierId)); // pb un la fonction removeBarrier
+        let tmp = ram.processes;
+
+        for (let i = 0; i < tmp.length; i++) {
+            for (let j = 0; j < tmp[i].operations.length; j++) {
+                for (let z = 0; z < tmp[i].operations[j].length; z++){
+                    if (tmp[i].operations[j][z].type === (0 - (props.barrierId + 1))) {
+                        tmp[i].operations[j].splice(z, 1);
+                    }
+                }
+            }
+        }
+        //setDisableBarrier(false);
+        dispatch(updateProcesses(tmp))
+        console.log(ram.processes);
+
+        dispatch(removeBarrier(props.barrierId));
         console.log(barriers);
     }
     
-    const ReinitializeBarrier = () => {
-        //let tmp = ram.processes;
-        console.log(barriers);
-    }
-
-
     return (
         <>
             <br/>
-            <br/>
-            {/* <Button onClick={testAddBarrier}>Test add 1</Button>
-            <Button onClick={testRemoveBarrier}>Test remove last</Button>
-            <Button onClick={testToggleBarrier}>Test toggle</Button>
-            <Button onClick={testUpdateProcessBarrier}>Test update barrier</Button> */}
             <Row>
                 <Col md={1}></Col>
                 <Col md={10}>
-                    <h3>Barrières {props.barrierId}</h3>
+                    <h3>Barrières {props.barrierId+1}<Button onClick={RemoveBarrier} variant={"danger"}><Trash/></Button></h3>
                 </Col>
                 <Col md={1}></Col>   
             </Row>
             <Row>
                 <Col md={1}></Col>
                 <Col md={10}>
-                    <Button onClick={RemoveBarrier}>Remove Barriere</Button>
-                    <Button onClick={ReinitializeBarrier} disabled>Reinitialize</Button>
                     <ListGroup horizontal={true}>
                         {barrierItems}
                     </ListGroup> 
